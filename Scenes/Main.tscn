@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=1]
+
+[ext_resource path="res://Scripts/GUI.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/PlaceHolders/BasicView(1).jpg" type="Texture" id=2]
+[ext_resource path="res://Scripts/Maths.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Lvl_1.gd" type="Script" id=4]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="GUI" type="Node2D" parent="."]
+
+script/script = ExtResource( 1 )
+
+[node name="Background" type="Sprite" parent="."]
+
+transform/pos = Vector2( 511.334, 298.742 )
+transform/scale = Vector2( 1.0739, 0.844191 )
+texture = ExtResource( 2 )
+
+[node name="Maths" type="Node2D" parent="."]
+
+script/script = ExtResource( 3 )
+moral = 0
+troops = 0
+resources = 0
+ronda = 0
+
+[node name="Levels" type="Node" parent="."]
+
+[node name="Lvl_1" type="Node" parent="Levels"]
+
+script/script = ExtResource( 4 )
+
+
