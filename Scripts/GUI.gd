@@ -6,14 +6,22 @@ func _ready():
 	
 
 func _fixed_process(delta):
-	var label_recursos = get_node("resources")
-	var label_tropas = get_node("troops")
-	var label_moral = get_node("moral")
+	var label_recursos
+	var label_tropas
+	var label_moral 
 	
-	var value_recursos = get_tree().get_root().get_node("global").resources
-	var value_tropas = get_tree().get_root().get_node("Global").troops
-	var value_moral = get_tree().get_root().get_node("Global").moral
-	var value_day = get_tree().get_root().get_node("Global").day
-	label_recursos.set_text("Resources: " + str(value_recursos))
-	label_tropas.set_text("Toops: " + str(value_tropas))
-	label_moral.set_text("Moral: " + str(value_moral))
+	
+	var value_resources = get_parent().get_node("Maths").current_resources
+	var value_troops    = get_parent().get_node("Maths").current_troops
+	var value_moral     = get_parent().get_node("Maths").current_moral
+	
+	var value_day = get_parent().get_node("Maths").current_day
+	
+	var value_enemyR = get_parent().get_node("Maths").current_enemyR
+	var value_enemyT = get_parent().get_node("Maths").current_enemyT
+	var value_enemyM = get_parent().get_node("Maths").current_enemyM
+	
+	
+	get_node("My_values/Resources").set_text("Resources: " + str(value_resources) + " days")
+	#label_tropas = ("Toops: " + str(value_troops))
+	#label_moral = ("Moral: " + str(value_moral))
