@@ -19,8 +19,6 @@ func _process(delta):
 	var label_recursos
 	var label_tropas
 	var label_moral 
-	
-
 	var value_resources = global.resources
 	var value_troops    = global.troops
 	var value_moral     = global.moral
@@ -34,3 +32,5 @@ func _process(delta):
 	get_node("My_values/Resources").set_text("Supplies: " + str(value_resources/value_troops))
 	get_node("My_values/Troops").set_text("Troops: " + str(value_troops))
 	get_node("My_values/Moral").set_text("Moral: " + str(value_moral))
+	
+
