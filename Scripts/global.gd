@@ -19,6 +19,7 @@ var enemyHasMove = false
 
 #use to increase the probability to die starving and to get down the moral
 var days_starving = 0
+var enemy_days_starving = 0
 
 var hunger_moralDown
 var hunger_troopsDown
@@ -47,18 +48,22 @@ func set_enemyM(cEnemyM):
 	enemyM = cEnemyM
 
 #moral decrement by hunger, take in count moral and days_starving
-func hunger_moralDown():
-	hunger_moralDown = int(round((pow(10,(moral/100))) * pow(1.1,days_starving) * randF()) )
+func hunger_moralDown(any_resources , any_troops , any_moral):
+	if(days_starving == 1 and any_resources > 0):
+		hunger_moralDown = int(round((pow(10,(any_moral/100))) * pow(1.1,days_starving) * randF() * (any_troops/any_resources)) )
 	return hunger_moralDown
 
 #troops decrement by hunger, take in count troops and days starving
-func hunger_troopsDown():
-	hunger_troopsDown = int(round(((pow(10,days_starving/10) * randF()) * 0.1) * ((troops/30)*randF() )))
+func hunger_troopsDown(any_resources , any_troops):
+	if(days_starving == 1 and any_resources > 0):
+		hunger_troopsDown = int(round(((pow(10,days_starving/10) * randF()) * 0.1) * ((any_troops/30)*randF() ) * (any_troops/any_resources)))
+	else:
+		hunger_troopsDown = int(round(((pow(10,days_starving/10) * randF()) * 0.1) * ((any_troops/30)*randF() )))
 	return hunger_troopsDown
 
 #enemies recive supplies once per week
 func enemy_resupply():
-	enemy_resupply = (log(enemyT+1) * 70) / ( log(enemyR)/log(10) )
+	enemy_resupply = (log(enemyT+1) * 70) / ( log(enemyR * 0.1)/log(10) )
 
 #random factor between 0 and 2, most probably 1 less prob 0 or 2
 func randF():
@@ -66,12 +71,18 @@ func randF():
 
 #in case any value is under zero, this function put them to 0, because any value can go under 0 (since moral is a %)
 func valuesOverZ():
-	if(moral<0):
-		moral=0
-	if(troops<0):
-		troops=0
-	if(resources<0):
+	if(moral < 0):
+		moral = 0
+	if(troops < 0):
+		troops = 0
+	if(resources < troops):
 		resources=0
+	if(enemyM < 0):
+		enemyM = 0
+	if(enemyT < 0):
+		enemyT = 0
+	if(enemyR < enemyT):
+		enemyR=0
 
 ##When a day ends: incrises day, and take resources taking in count troops, if 
 ##	there is not enough resources moral will go down and soldiers may die
@@ -80,22 +91,24 @@ func new_day ():
 		day += 1
 		if(rationing):
 			resources = resources - (troops/4)
-			moral -= int(round((hunger_moralDown() * randF() * 0.33) ))
+			moral -= int(round((hunger_moralDown(resources , troops , moral) * randF() * 0.25) ))
 			if(moral<0):
 				moral = 0
 		elif(resources - troops >= 0):
-			resources = resources - troops
+			resources -= troops
 			days_starving = 0
 			
 		else:
 			days_starving += 1
-			moral -= hunger_moralDown()
-			troops -= hunger_troopsDown()
+			moral -= hunger_moralDown(resources , troops , moral)
+			troops -= hunger_troopsDown(resources , troops)
 			resources = 0
 		if (enemyR - enemyT >= 0):
 			enemyR -= enemyT
-			
-		
+			enemy_days_starving = 0
+			print("this 'If' works propertly")
+		else:
+			enemy_days_starving += 1
+			enemyM -= hunger_moralDown(enemyR , enemyT , enemyM)
+			enemyT -= hunger_troopsDown(enemyR , enemyT)
 		valuesOverZ()
-
-
