@@ -11,6 +11,8 @@ var enemyR    = 15000
 var enemyT    = 300
 var enemyM    = 89
 
+var enemy_resupply
+
 #booleans to know the end of the round and turns
 var playerHasMove = false
 var enemyHasMove = false
@@ -54,6 +56,10 @@ func hunger_troopsDown():
 	hunger_troopsDown = int(round(((pow(10,days_starving/10) * randF()) * 0.1) * ((troops/30)*randF() )))
 	return hunger_troopsDown
 
+#enemies recive supplies once per week
+func enemy_resupply():
+	enemy_resupply = (log(enemyT+1) * 70) / ( log(enemyR)/log(10) )
+
 #random factor between 0 and 2, most probably 1 less prob 0 or 2
 func randF():
 	return (2 * ( ( (randf(0,1)) + (randf(0,1)) + (randf(0,1)) ) / 3) )
@@ -86,6 +92,10 @@ func new_day ():
 			moral -= hunger_moralDown()
 			troops -= hunger_troopsDown()
 			resources = 0
+		if (enemyR - enemyT >= 0):
+			enemyR -= enemyT
+			
+		
 		valuesOverZ()
 
 

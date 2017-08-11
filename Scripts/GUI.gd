@@ -16,9 +16,6 @@ func _ready():
 
 
 func _process(delta):
-	var label_recursos
-	var label_tropas
-	var label_moral 
 	var value_resources = global.resources
 	var value_troops    = global.troops
 	var value_moral     = global.moral
